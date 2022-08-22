@@ -115,22 +115,23 @@ func UpdateATodo() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"Error json input": err.Error()})
 		}
 		defer cancel()
-
+		objId, _ := primitive.ObjectIDFromHex(todo.Id.Hex())
 		errFind := todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&todo)
 		if errFind != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"cannot find your todo": errFind.Error()})
 			return
 		}
-		query := bson.M{"user_id": userId}
-		update := bson.M{"$set": bson.M{"todo_list.0": todo}}
-		todoListCollection.UpdateOne(ctx, query, update)
-		// _, err := todoListCollection.UpdateOne(ctx, bson.M{"todo_list[0].$._id": objId}, bson.M{"$set": todo})
-		// if err != nil {
-		// 	c.JSON(http.StatusInternalServerError, gin.H{"error update todo": err.Error()})
-		// 	return
-		// }
+		query := bson.M{"user_id": userId, "todo_list._id": objId}
+		update := bson.M{"$set": bson.M{"todo_list.$": todo}}
 
-		// defer cancel()
+		_, errUpdate := todoListCollection.UpdateOne(ctx, query, update)
+
+		if errUpdate != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error update todo": errUpdate.Error()})
+			return
+		}
+
+		defer cancel()
 
 		c.JSON(http.StatusOK, todo)
 
