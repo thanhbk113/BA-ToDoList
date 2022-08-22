@@ -60,6 +60,7 @@ func CreateToDo() gin.HandlerFunc {
 		err = todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&foundTodoList)
 		if err != nil { //check if todo not exist when user create first then create one
 			newTodoList := models.TodoList{
+				Id:         primitive.NewObjectID(),
 				User_id:    userId,
 				Created_at: todo.Created_at,
 			}
@@ -107,23 +108,29 @@ func UpdateATodo() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
-		todoId := c.Param("todo_id")
-		var todo models.TodoList
+		userId := c.Param("user_id")
+		var todo models.Todo
+		fmt.Println(userId)
 		if err := c.BindJSON(&todo); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"Error json input": err.Error()})
 		}
-		objId, _ := primitive.ObjectIDFromHex(todoId)
-		fmt.Println(todoId, "-->", objId)
 		defer cancel()
 
-		_, err := todoListCollection.UpdateOne(ctx, bson.M{"todo_list.task": "Drinking Tea"}, bson.M{"$set": todo})
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error update todo": err.Error()})
-			fmt.Println(err.Error())
+		errFind := todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&todo)
+		if errFind != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"cannot find your todo": errFind.Error()})
 			return
 		}
+		query := bson.M{"user_id": userId}
+		update := bson.M{"$set": bson.M{"todo_list.0": todo}}
+		todoListCollection.UpdateOne(ctx, query, update)
+		// _, err := todoListCollection.UpdateOne(ctx, bson.M{"todo_list[0].$._id": objId}, bson.M{"$set": todo})
+		// if err != nil {
+		// 	c.JSON(http.StatusInternalServerError, gin.H{"error update todo": err.Error()})
+		// 	return
+		// }
 
-		defer cancel()
+		// defer cancel()
 
 		c.JSON(http.StatusOK, todo)
 

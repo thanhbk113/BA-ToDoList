@@ -14,5 +14,5 @@ func UserRoutes(incomingRoutes *gin.Engine) {
 func TodoRoutes(incommingRoutes *gin.Engine) {
 	incommingRoutes.POST("todo/:user_id", controllers.CreateToDo())
 	incommingRoutes.GET("todos/:user_id", controllers.GetAllTodoList())
-	incommingRoutes.PUT("todo/:todo_id", controllers.UpdateATodo())
+	incommingRoutes.PUT("todo/:user_id", controllers.UpdateATodo())
 }

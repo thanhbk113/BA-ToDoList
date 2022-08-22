@@ -19,12 +19,13 @@ type User struct {
 }
 
 type Todo struct {
-	Id         primitive.ObjectID `json:"id"`
+	Id         primitive.ObjectID `bson:"_id"`
 	Task       string             `json:"task" validate:"required"`
 	Done       bool               `json:"done"`
 	Created_at time.Time          `json:"created_at"`
 }
 type TodoList struct {
-	User_id    string    `json:"user_id"` //related SQL
-	Created_at time.Time `json:"created_at"`
+	Id         primitive.ObjectID `bson:"_id"`
+	User_id    string             `json:"user_id"` //related SQL
+	Created_at time.Time          `json:"created_at"`
 }
