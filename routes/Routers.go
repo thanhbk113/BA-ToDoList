@@ -1,0 +1,18 @@
+package routes
+
+import (
+	"todolist/controllers"
+
+	"github.com/gin-gonic/gin"
+)
+
+func UserRoutes(incomingRoutes *gin.Engine) {
+	incomingRoutes.POST("/signup", controllers.SignUp())
+	incomingRoutes.POST("/login", controllers.Login())
+}
+
+func TodoRoutes(incommingRoutes *gin.Engine) {
+	incommingRoutes.POST("todo/:user_id", controllers.CreateToDo())
+	incommingRoutes.GET("todos/:user_id", controllers.GetAllTodoList())
+	incommingRoutes.PUT("todo/:todo_id", controllers.UpdateATodo())
+}

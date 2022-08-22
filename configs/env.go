@@ -13,20 +13,18 @@ import (
 )
 
 //func EnvMongoURI get MONGOURI from .env file
-func EnvMongoURI() string {
+func EnvMongoURI(name string) string {
 	err := godotenv.Load()
 
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	fmt.Println(os.Getenv("MONGOURI"))
-
-	return os.Getenv("MONGOURI")
+	return os.Getenv(name)
 }
 
 func ConnectDB() *mongo.Client {
-	client, err := mongo.NewClient(options.Client().ApplyURI(EnvMongoURI())) // create new client with mongo uri
+	client, err := mongo.NewClient(options.Client().ApplyURI(EnvMongoURI("MONGOURI"))) // create new client with mongo uri
 
 	if err != nil {
 		log.Fatal("err connect mongo db uri:", err)
@@ -59,7 +57,7 @@ var DB *mongo.Client = ConnectDB()
 //getting database collections
 
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	collection := client.Database("golangApi").Collection(collectionName)
+	collection := client.Database("golangAPI").Collection(collectionName)
 
 	return collection
 }
