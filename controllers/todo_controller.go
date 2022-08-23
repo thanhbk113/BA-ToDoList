@@ -149,13 +149,17 @@ func DeleteATodo() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"Error json input": err.Error()})
 		}
 		defer cancel()
-		objId, _ := primitive.ObjectIDFromHex(todo.Id.Hex())
+
+		//objId, _ := primitive.ObjectIDFromHex(todo.Id.Hex())
+
 		errFind := todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&todo)
 		if errFind != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"cannot find your todo": errFind.Error()})
 			return
 		}
-		query := bson.M{"user_id": userId, "todo_list._id": objId}
+
+		query := bson.M{"user_id": userId, "todo_list": todo}
+
 		delete := bson.M{"$pull": bson.M{"todo_list": todo}}
 
 		_, errDelete := todoListCollection.UpdateOne(ctx, query, delete)
