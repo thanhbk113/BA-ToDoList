@@ -133,7 +133,41 @@ func UpdateATodo() gin.HandlerFunc {
 
 		defer cancel()
 
-		c.JSON(http.StatusOK, todo)
+		c.JSON(http.StatusOK, gin.H{"message": "Update success"})
+
+	}
+}
+
+func DeleteATodo() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+
+		userId := c.Param("user_id")
+		var todo models.Todo
+		fmt.Println(userId)
+		if err := c.BindJSON(&todo); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"Error json input": err.Error()})
+		}
+		defer cancel()
+		objId, _ := primitive.ObjectIDFromHex(todo.Id.Hex())
+		errFind := todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&todo)
+		if errFind != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"cannot find your todo": errFind.Error()})
+			return
+		}
+		query := bson.M{"user_id": userId, "todo_list._id": objId}
+		delete := bson.M{"$pull": bson.M{"todo_list": todo}}
+
+		_, errDelete := todoListCollection.UpdateOne(ctx, query, delete)
+
+		if errDelete != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error delete todo": errDelete.Error()})
+			return
+		}
+
+		defer cancel()
+
+		c.JSON(http.StatusOK, gin.H{"message": "Delete success"})
 
 	}
 }

@@ -15,4 +15,5 @@ func TodoRoutes(incommingRoutes *gin.Engine) {
 	incommingRoutes.POST("todo/:user_id", controllers.CreateToDo())
 	incommingRoutes.GET("todos/:user_id", controllers.GetAllTodoList())
 	incommingRoutes.PUT("todo/:user_id", controllers.UpdateATodo())
+	incommingRoutes.DELETE("todo/:user_id", controllers.DeleteATodo())
 }
