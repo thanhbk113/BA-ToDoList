@@ -11,6 +11,7 @@ import (
 func main() {
 	router := gin.New()
 	Port := os.Getenv("PORT")
+	router.Use(middleware.CORSMiddleware())
 
 	if Port == "" {
 		Port = "8080"
@@ -22,8 +23,6 @@ func main() {
 
 	//Todo routes
 	routes.TodoRoutes(router)
-
-	router.Use(middleware.CORSMiddleware())
 
 	router.Run("0.0.0.0:" + Port)
 }
