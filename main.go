@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"todolist/middleware"
 	"todolist/routes"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +23,7 @@ func main() {
 	//Todo routes
 	routes.TodoRoutes(router)
 
-	//router.Use(middleware.Authentcation())
+	router.Use(middleware.Authentcation())
 
 	router.Run("0.0.0.0:" + Port)
 }

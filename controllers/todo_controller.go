@@ -85,7 +85,6 @@ func CreateToDo() gin.HandlerFunc {
 func GetAllTodoList() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		c.Header("Access-Control-Allow-Origin", "*")
 		userId := c.Param("user_id")
 		var todo_list struct {
 			User_id    string        `json:"user_id"` //related SQL
