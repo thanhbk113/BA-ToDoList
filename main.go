@@ -23,7 +23,7 @@ func main() {
 	//Todo routes
 	routes.TodoRoutes(router)
 
-	router.Use(middleware.Authentcation())
+	router.Use(middleware.CORSMiddleware())
 
 	router.Run("0.0.0.0:" + Port)
 }
