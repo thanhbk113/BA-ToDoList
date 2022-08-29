@@ -94,7 +94,7 @@ func SignUp() gin.HandlerFunc {
 		user.Token = &token
 		user.Refresh_token = &refreshToken
 
-		resultInsertNumber, insertErr := userCollection.InsertOne(ctx, user)
+		_, insertErr := userCollection.InsertOne(ctx, user)
 
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"Error when create user": insertErr.Error()})
@@ -103,7 +103,7 @@ func SignUp() gin.HandlerFunc {
 
 		defer cancel()
 
-		c.JSON(http.StatusOK, resultInsertNumber)
+		c.JSON(http.StatusOK, gin.H{"message": "success"})
 	}
 }
 
