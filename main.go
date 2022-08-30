@@ -12,6 +12,7 @@ func main() {
 	router := gin.New()
 	Port := os.Getenv("PORT")
 	router.Use(middleware.CORSMiddleware())
+	router.Use(middleware.Authentcation())
 
 	if Port == "" {
 		Port = "8080"
