@@ -96,7 +96,7 @@ func GetAllTodoList() gin.HandlerFunc {
 
 		err := todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&todo_list)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"Error user not exist": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"data": todo_list})
