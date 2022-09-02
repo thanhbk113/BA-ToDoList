@@ -123,18 +123,12 @@ func UpdateATodo() gin.HandlerFunc {
 		update := bson.M{"$set": bson.M{"todo_list.$": todo}}
 
 		_, errUpdate := todoListCollection.UpdateOne(ctx, query, update)
+
 		if errUpdate != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error update todo": errUpdate.Error()})
 			return
 		}
 
-		query = bson.M{"user_id": userId, "todo_list._id": objId}
-		delete := bson.M{"$pull": bson.M{"todo_list": todo}}
-		_, errUpdate = todoListCollection.UpdateOne(ctx, query, delete)
-		if errUpdate != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error delete when update todo": errUpdate.Error()})
-			return
-		}
 		defer cancel()
 
 		c.JSON(http.StatusOK, gin.H{"message": "Update success"})
