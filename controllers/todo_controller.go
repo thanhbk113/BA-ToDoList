@@ -109,7 +109,6 @@ func UpdateATodo() gin.HandlerFunc {
 
 		userId := c.Param("user_id")
 		var todo models.Todo
-		fmt.Println(userId)
 		if err := c.BindJSON(&todo); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"Error json input": err.Error()})
 		}
