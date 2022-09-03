@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 	"todolist/configs"
@@ -115,7 +114,6 @@ func UpdateATodo() gin.HandlerFunc {
 		defer cancel()
 		objId, _ := primitive.ObjectIDFromHex(todo.Id.Hex())
 		errFind := todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&todo)
-		fmt.Println("todo: ", todo)
 		if errFind != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"cannot find your todo": errFind.Error()})
 			return
