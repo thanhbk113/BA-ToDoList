@@ -95,8 +95,8 @@ func SignUp() gin.HandlerFunc {
 		user.Token = &token
 		user.Refresh_token = &refreshToken
 
-		c.SetCookie("access_token", token, 3600, "/", "todosbk.netlify.app", true, true)
-		c.SetCookie("refresh_token", refreshToken, 3600, "/", "todosbk.netlify.app", true, true)
+		c.SetCookie("access_token", token, 3600, "/", "https://todosbk.netlify.app/", true, true)
+		c.SetCookie("refresh_token", refreshToken, 3600, "/", "https://todosbk.netlify.app/", true, true)
 
 		_, insertErr := userCollection.InsertOne(ctx, user)
 
