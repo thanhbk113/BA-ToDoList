@@ -113,7 +113,9 @@ func UpdateATodo() gin.HandlerFunc {
 		}
 		defer cancel()
 		objId, _ := primitive.ObjectIDFromHex(todo.Id.Hex())
-		errFind := todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&todo)
+
+		var findTodo models.Todo
+		errFind := todoListCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&findTodo)
 		if errFind != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"cannot find your todo": errFind.Error()})
 			return
