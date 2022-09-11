@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -106,8 +105,6 @@ func SignUp() gin.HandlerFunc {
 		}
 
 		defer cancel()
-		accessCookie, _ := c.Cookie("access_token")
-		fmt.Println("access_token:", accessCookie)
 		c.JSON(http.StatusOK, gin.H{"message": "success"})
 	}
 }
