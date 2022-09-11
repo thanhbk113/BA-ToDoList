@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"todolist/helpers"
 
@@ -15,7 +15,7 @@ func Authentcation() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//get token from header
 		token := c.GetHeader("Authorization")
-		fmt.Println("token:", token)
+		log.Fatal("Token:", token)
 		// check token
 		if token == "" {
 			c.JSON(401, gin.H{
