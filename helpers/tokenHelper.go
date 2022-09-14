@@ -80,6 +80,7 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 		log.Fatal("Token is expired")
 		return nil, "Token is expired"
 	}
+	log.Fatal("Token Parse jwt:", token)
 
 	return claims, ""
 }

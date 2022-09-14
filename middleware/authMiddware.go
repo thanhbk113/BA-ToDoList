@@ -15,7 +15,7 @@ func Authentcation() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//get token from header
 		token := c.GetHeader("Authorization")
-		log.Fatal("Token:", token)
+		log.Fatal("Token get from Header:", token)
 		// check token
 		if token == "" {
 			c.JSON(401, gin.H{
