@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 	"todolist/configs"
@@ -81,6 +82,7 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 		return nil, "Token is expired"
 	}
 	log.Fatal("Token Parse jwt:", token)
+	fmt.Println("Token Parse jwt:", token)
 
 	return claims, ""
 }
